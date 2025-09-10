@@ -1,6 +1,14 @@
+<script setup>
+useHead({
+  title: "Todo List",
+});
+</script>
+
 <template>
-  <div>
-    <NuxtRouteAnnouncer />
-    <NuxtWelcome />
-  </div>
+  <nuxt-layout>
+    <v-app>
+      <nuxt-loading-indicator />
+      <nuxt-page />
+    </v-app>
+  </nuxt-layout>
 </template>
