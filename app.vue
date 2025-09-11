@@ -6,7 +6,7 @@ useHead({
 
 <template>
   <nuxt-layout>
-    <v-app>
+    <v-app style="max-width: 800px; margin: 0 auto; background: whitesmoke; border-radius: 10px">
       <nuxt-loading-indicator />
       <nuxt-page />
     </v-app>

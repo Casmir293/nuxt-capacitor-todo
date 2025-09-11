@@ -13,10 +13,16 @@ export const saveSession = async (session: any) => {
   }
 };
 
+/** checks if session exits on native */
+export const checkSession = async () => {
+  const { value } = await Preferences.get({ key: "supabase_session" });
+  return value;
+};
+
 /** restores session on native */
 export const loadSession = async () => {
   if (Capacitor.isNativePlatform()) {
-    const { value } = await Preferences.get({ key: "supabase_session" });
+    const value = await checkSession();
     if (value) {
       const session = JSON.parse(value);
       const { $supabase } = useNuxtApp();

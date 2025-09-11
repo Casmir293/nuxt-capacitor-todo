@@ -3,7 +3,6 @@ export default function useTask() {
   const loading = reactive({
     addTask: false,
     fetchTasks: false,
-    deleteTask: false,
   });
 
   const addTask = async (payload: TaskPayload) => {
@@ -38,7 +37,7 @@ export default function useTask() {
 
   const deleteTask = async (taskID: number) => {
     try {
-      loading.deleteTask = true;
+      loading.fetchTasks = true;
       const { error } = await $supabase.from("tasks").delete().eq("id", taskID);
       if (error) throw error;
       return true;
@@ -47,7 +46,7 @@ export default function useTask() {
       alert(err.message);
       return false;
     } finally {
-      loading.deleteTask = false;
+      loading.fetchTasks = false;
     }
   };
 

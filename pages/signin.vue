@@ -30,8 +30,6 @@ const signinFn = async () => {
   try {
     const res = await signin(payload);
     if (!res) return;
-    payload.email = "";
-    payload.password = "";
     navigateTo("/");
   } finally {
     loading.value = false;

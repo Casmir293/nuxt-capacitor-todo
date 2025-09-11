@@ -109,15 +109,7 @@ onMounted(async () => {
               <v-card-title>{{ task.title }}</v-card-title>
               <v-card-text>{{ task.desc }}</v-card-text>
               <v-card-actions>
-                <v-btn
-                  color="error"
-                  variant="text"
-                  @click="deleteTaskFn(task.id)"
-                  :disabled="loading.deleteTask"
-                  :loading="loading.deleteTask"
-                >
-                  Delete
-                </v-btn>
+                <v-btn color="error" variant="text" @click="deleteTaskFn(task.id)"> Delete </v-btn>
               </v-card-actions>
             </v-card>
           </v-col>

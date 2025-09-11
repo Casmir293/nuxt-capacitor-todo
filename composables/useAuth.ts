@@ -55,7 +55,7 @@ export default function useAuth() {
       authStore().value = null;
     } catch (err: any) {
       logger("Signout failed:", err);
-      alert(err.message);
+      // alert(err.message);
       return false;
     }
   };
