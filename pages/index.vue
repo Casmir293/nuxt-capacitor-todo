@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { VForm } from "vuetify/components";
 
+definePageMeta({
+  middleware: "auth",
+});
+
 const { loading, addTask, fetchTasks, deleteTask } = useTask();
 const { signout } = useAuth();
 

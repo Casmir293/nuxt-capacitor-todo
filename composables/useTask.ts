@@ -13,7 +13,7 @@ export default function useTask() {
       if (error) throw error;
       return true;
     } catch (err: any) {
-      console.log("Add task failed:", err);
+      logger("Add task failed:", err);
       alert(err.message);
       return false;
     } finally {
@@ -28,7 +28,7 @@ export default function useTask() {
       if (error) throw error;
       return data;
     } catch (err: any) {
-      console.log("Fetch tasks failed:", err);
+      logger("Fetch tasks failed:", err);
       alert(err.message);
       return [];
     } finally {
@@ -43,7 +43,7 @@ export default function useTask() {
       if (error) throw error;
       return true;
     } catch (err: any) {
-      console.log("Delete task failed:", err);
+      logger("Delete task failed:", err);
       alert(err.message);
       return false;
     } finally {

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { VForm } from "vuetify/components";
 
+definePageMeta({
+  middleware: "guest",
+});
+
 const { signup } = useAuth();
 
 const form = ref<VForm | null>(null);

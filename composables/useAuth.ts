@@ -23,7 +23,7 @@ export default function useAuth() {
 
       return data;
     } catch (err: any) {
-      console.log("Signup failed:", err);
+      logger("Signup failed:", err);
       alert(err.message);
       return null;
     }
@@ -36,9 +36,10 @@ export default function useAuth() {
         password: payload.password,
       });
       if (error) throw error;
+      if (data.session) await saveSession(data.session);
       return data;
     } catch (err: any) {
-      console.log("Signin failed:", err);
+      logger("Signin failed:", err);
       alert(err.message);
       return null;
     }
@@ -46,12 +47,14 @@ export default function useAuth() {
 
   const signout = async () => {
     try {
+      navigateTo("/signin");
+      useCookie("auth").value = null;
       const { error } = await $supabase.auth.signOut();
       if (error) throw error;
-      navigateTo("/signin");
-      return true;
+      removeSession();
+      authStore().value = null;
     } catch (err: any) {
-      console.log("Signout failed:", err);
+      logger("Signout failed:", err);
       alert(err.message);
       return false;
     }
