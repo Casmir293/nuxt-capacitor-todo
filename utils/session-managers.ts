@@ -42,6 +42,3 @@ export const removeSession = async () => {
     await Preferences.remove({ key: "supabase_session" });
   }
 };
-
-/** auth user state */
-export const authStore = () => useState<any | null>("auth_user", () => null);
