@@ -45,6 +45,26 @@ export default function useAuth() {
     }
   };
 
+  const fetchUser = async () => {
+    try {
+      const {
+        data: { user },
+        error: authError,
+      } = await $supabase.auth.getUser();
+
+      if (authError) throw authError;
+      if (!user) throw new Error("No authenticated user found");
+
+      const { data, error } = await $supabase.from("users").select("*").eq("id", user.id).single();
+      if (error) throw error;
+      return data;
+    } catch (err: any) {
+      logger("Fetch user failed:", err);
+      alert(err.message);
+      return null;
+    }
+  };
+
   const signout = async () => {
     try {
       navigateTo("/signin");
@@ -63,6 +83,7 @@ export default function useAuth() {
   return {
     signup,
     signin,
+    fetchUser,
     signout,
   };
 }

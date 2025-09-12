@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Capacitor } from "@capacitor/core";
 import type { VForm } from "vuetify/components";
 
 definePageMeta({
@@ -6,10 +7,13 @@ definePageMeta({
 });
 
 const { loading, addTask, fetchTasks, deleteTask } = useTask();
-const { signout } = useAuth();
+const { pickOrUploadPhoto } = usePhotoUpload();
+const { fetchUser, signout } = useAuth();
 
+const isNative = Capacitor.isNativePlatform();
 const dialog = ref(false);
 const tasks = ref<Task[]>([]);
+const user = ref<User | null>(null);
 const isFormValid = ref(false);
 const form = ref<VForm | null>(null);
 const newTask = reactive<TaskPayload>({
@@ -24,11 +28,14 @@ const rules = reactive({
 });
 
 /**  handle file upload */
-const handleFileUpload = (e: Event) => {
-  const target = e.target as HTMLInputElement;
-  if (target.files && target.files[0]) {
-    newTask.photo = URL.createObjectURL(target.files[0]);
-  }
+const selectPhoto = async () => {
+  const url = await pickOrUploadPhoto(); // native
+  if (url) newTask.photo = url;
+};
+
+const onFileChange = async (e: Event) => {
+  const url = await pickOrUploadPhoto(e); // web
+  if (url) newTask.photo = url;
 };
 
 /**  create new task */
@@ -55,12 +62,15 @@ const deleteTaskFn = async (TaskID: number) => {
 
 onMounted(async () => {
   tasks.value = (await fetchTasks()) as Task[];
+  user.value = (await fetchUser()) as User;
 });
 </script>
 
 <template>
   <div class="pa-4">
-    <p>Hello, <b>User</b> 👋</p>
+    <p>
+      Hello, <b>{{ user?.name }}</b> 👋
+    </p>
     <h1 class="my-5 text-center">📝 Plan your Day</h1>
 
     <!-- CTA -->
@@ -83,7 +93,14 @@ onMounted(async () => {
               outlined
               dense
             />
-            <v-file-input label="Upload Photo" accept="image/*" prepend-icon="mdi-camera" @change="handleFileUpload" />
+            <v-file-input
+              v-show="!isNative"
+              label="Upload Photo"
+              accept="image/*"
+              prepend-icon="mdi-camera"
+              @change="onFileChange"
+            />
+            <v-btn v-show="isNative" prepend-icon="mdi-camera" @click="selectPhoto">Take/Choose Photo</v-btn>
             <div v-if="newTask.photo" class="mt-3 text-center">
               <v-img :src="newTask.photo" max-width="120" max-height="120" class="rounded" />
             </div>
